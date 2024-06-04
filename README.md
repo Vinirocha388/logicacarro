@@ -40,6 +40,7 @@ A função `stopCar` para o carro, configurando todos os pinos de controle dos m
 
 O código completo configura um Arduino para controlar um carro robô através de comandos recebidos via Bluetooth. Dependendo do comando recebido, o Arduino ajusta os motores para mover o carro na direção desejada ou para parar.
 
-![image](https://github.com/Vinirocha388/logicacarro/assets/158187426/ed517466-196d-495e-855d-b962d6d21ee2)
+![image](https://github.com/Vinirocha388/logicacarro/assets/158187426/92c3f3c6-2e47-4e8d-80f4-9e602e998be7)
+
 
 
