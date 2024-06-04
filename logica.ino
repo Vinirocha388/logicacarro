@@ -76,4 +76,22 @@ void turnLeft() {
   analogWrite(ENB, 255);    // Define a velocidade máxima para os motores conectados
 }
 
+void turnRight() {
+  // Configura os motores para virar o carro para a direita
+  digitalWrite(IN1, HIGH);  // Motor 1 gira para frente
+  digitalWrite(IN2, LOW);   // Motor 1 gira para frente
+  digitalWrite(IN3, LOW);   // Motor 2 parado
+  digitalWrite(IN4, LOW);   // Motor 2 parado
+  analogWrite(ENA, 255);    // Define a velocidade máxima para os motores conectados 
+  analogWrite(ENB, 255);    // Define a velocidade máxima para os motores conectados (parado)
+}
 
+void stopCar() {
+  // Configura os motores para parar o carro
+  digitalWrite(IN1, LOW);   // Motor 1 parado
+  digitalWrite(IN2, LOW);   // Motor 1 parado
+  digitalWrite(IN3, LOW);   // Motor 2 parado
+  digitalWrite(IN4, LOW);   // Motor 2 parado
+  analogWrite(ENA, 0);      // Define a velocidade 0 para os motores conectados (parado)
+  analogWrite(ENB, 0);      // Define a velocidade 0 para os motores conectados (parado)
+}
