@@ -42,5 +42,8 @@ O código completo configura um Arduino para controlar um carro robô através d
 
 ![image](https://github.com/Vinirocha388/logicacarro/assets/158187426/92c3f3c6-2e47-4e8d-80f4-9e602e998be7)
 
+![image](https://github.com/Vinirocha388/logicacarro/assets/158187426/c0166e30-2e0b-4512-b498-44499d03708c)
+
+
 
 
