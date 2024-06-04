@@ -46,3 +46,34 @@ void loop() {
   }
 }
 
+void moveForward() {
+  // Configura os motores para mover o carro para frente
+  digitalWrite(IN1, HIGH);  // Motor 1 gira para frente
+  digitalWrite(IN2, LOW);   // Motor 1 gira para frente
+  digitalWrite(IN3, HIGH);  // Motor 2 gira para frente
+  digitalWrite(IN4, LOW);   // Motor 2 gira para frente
+  analogWrite(ENA, 255);    // Define a velocidade máxima para os motores conectados 
+  analogWrite(ENB, 255);    // Define a velocidade máxima para os motores conectados 
+}
+
+void moveBackward() {
+  // Configura os motores para mover o carro para trás
+  digitalWrite(IN1, LOW);   // Motor 1 gira para trás
+  digitalWrite(IN2, HIGH);  // Motor 1 gira para trás
+  digitalWrite(IN3, LOW);   // Motor 2 gira para trás
+  digitalWrite(IN4, HIGH);  // Motor 2 gira para trás
+  analogWrite(ENA, 255);    // Define a velocidade máxima para os motores conectados 
+  analogWrite(ENB, 255);    // Define a velocidade máxima para os motores conectados 
+}
+
+void turnLeft() {
+  // Configura os motores para virar o carro para a esquerda
+  digitalWrite(IN1, LOW);   // Motor 1 parado
+  digitalWrite(IN2, LOW);   // Motor 1 parado
+  digitalWrite(IN3, HIGH);  // Motor 2 gira para frente
+  digitalWrite(IN4, LOW);   // Motor 2 gira para frente
+  analogWrite(ENA, 255);    // Define a velocidade máxima para os motores conectados (parado)
+  analogWrite(ENB, 255);    // Define a velocidade máxima para os motores conectados
+}
+
+
