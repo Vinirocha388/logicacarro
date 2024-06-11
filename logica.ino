@@ -1,97 +1,69 @@
-// Definição dos pinos de controle dos motores
-#define IN1 2  // Pino 2 do Arduino conectado ao IN1
-#define IN2 3  // Pino 3 do Arduino conectado ao IN2 
-#define IN3 4  // Pino 4 do Arduino conectado ao IN3 
-#define IN4 5  // Pino 5 do Arduino conectado ao IN4  
-#define ENA 9  // Pino 9 do Arduino conectado ao ENA (PWM)
-#define ENB 10 // Pino 10 do Arduino conectado ao ENB (PWM)
+#define pinMotor1A 2 // Pino do Motor 1A
+#define pinMotor1B 3 // Pino do Motor 1B
+#define pinMotor2A 4  // Pino do Motor 2A
+#define pinMotor2B 5 // Pino do Motor 2B
+#define pinBtRx 6     // Pino Rx do módulo Bluetooth
+#define pinBtTx 7     // Pino Tx do módulo Bluetooth
+
+#include <SoftwareSerial.h>
+SoftwareSerial bluetooth(pinBtRx, pinBtTx); // Cria uma instância de SoftwareSerial
 
 void setup() {
-  // Configuração dos pinos como saída
-  pinMode(IN1, OUTPUT);  // Define o pino IN1 como saída
-  pinMode(IN2, OUTPUT);  // Define o pino IN2 como saída
-  pinMode(IN3, OUTPUT);  // Define o pino IN3 como saída
-  pinMode(IN4, OUTPUT);  // Define o pino IN4 como saída
-  pinMode(ENA, OUTPUT);  // Define o pino ENA como saída
-  pinMode(ENB, OUTPUT);  // Define o pino ENB como saída
-  
-  // Inicia a comunicação serial para o módulo Bluetooth
-  Serial.begin(9600);  // Define a taxa de transmissão serial em 9600 bps
+  // Configura o estado das portas do Arduino como saídas para controlar os motores
+  pinMode(pinMotor1A, OUTPUT);
+  pinMode(pinMotor1B, OUTPUT);
+  pinMode(pinMotor2A, OUTPUT);
+  pinMode(pinMotor2B, OUTPUT);
+
+  // Inicializa os pinos dos motores com LOW para garantir que os motores estejam desligados inicialmente
+  digitalWrite(pinMotor1A, LOW);
+  digitalWrite(pinMotor1B, LOW);
+  digitalWrite(pinMotor2A, LOW);
+  digitalWrite(pinMotor2B, LOW);
+
+  // Inicia a comunicação serial para monitorar o que está acontecendo pelo monitor serial
+  Serial.begin(9600);
+
+  // Inicia a comunicação serial com o módulo Bluetooth
+  bluetooth.begin(9600);
 }
 
 void loop() {
-  // Verifica se há dados disponíveis na porta serial
-  if (Serial.available() > 0) {
-    // Lê o comando recebido via Bluetooth
-    char command = Serial.read();  // Lê o caractere do buffer serial
-    
-    // Verifica qual comando foi recebido e chama a função correspondente
-    switch(command) {
-      case 'F': // Frente
-        moveForward();  // Chama a função para mover o carro para frente
-        break;
-      case 'B': // Trás
-        moveBackward();  // Chama a função para mover o carro para trás
-        break;
-      case 'L': // Esquerda
-        turnLeft();  // Chama a função para virar o carro para a esquerda
-        break;
-      case 'R': // Direita
-        turnRight();  // Chama a função para virar o carro para a direita
-        break;
-      case 'S': // Parar
-        stopCar();  // Chama a função para parar o carro
-        break;
-    }
+  // Variável para armazenar o dado recebido via Bluetooth
+  char recebido;
+
+  // Verifica se há dados disponíveis no módulo Bluetooth
+  if (bluetooth.available()) {
+    recebido = bluetooth.read(); // Lê o dado recebido via Bluetooth
+    Serial.write(recebido);      // Envia o dado recebido para o monitor serial
+    Serial.println("- ");        // Adiciona uma nova linha para facilitar a leitura no monitor serial
   }
-}
 
-void moveForward() {
-  // Configura os motores para mover o carro para frente
-  digitalWrite(IN1, HIGH);  // Motor 1 gira para frente
-  digitalWrite(IN2, LOW);   // Motor 1 gira para frente
-  digitalWrite(IN3, HIGH);  // Motor 2 gira para frente
-  digitalWrite(IN4, LOW);   // Motor 2 gira para frente
-  analogWrite(ENA, 255);    // Define a velocidade máxima para os motores conectados 
-  analogWrite(ENB, 255);    // Define a velocidade máxima para os motores conectados 
-}
-
-void moveBackward() {
-  // Configura os motores para mover o carro para trás
-  digitalWrite(IN1, LOW);   // Motor 1 gira para trás
-  digitalWrite(IN2, HIGH);  // Motor 1 gira para trás
-  digitalWrite(IN3, LOW);   // Motor 2 gira para trás
-  digitalWrite(IN4, HIGH);  // Motor 2 gira para trás
-  analogWrite(ENA, 255);    // Define a velocidade máxima para os motores conectados 
-  analogWrite(ENB, 255);    // Define a velocidade máxima para os motores conectados 
-}
-
-void turnLeft() {
-  // Configura os motores para virar o carro para a esquerda
-  digitalWrite(IN1, LOW);   // Motor 1 parado
-  digitalWrite(IN2, LOW);   // Motor 1 parado
-  digitalWrite(IN3, HIGH);  // Motor 2 gira para frente
-  digitalWrite(IN4, LOW);   // Motor 2 gira para frente
-  analogWrite(ENA, 255);    // Define a velocidade máxima para os motores conectados (parado)
-  analogWrite(ENB, 255);    // Define a velocidade máxima para os motores conectados
-}
-
-void turnRight() {
-  // Configura os motores para virar o carro para a direita
-  digitalWrite(IN1, HIGH);  // Motor 1 gira para frente
-  digitalWrite(IN2, LOW);   // Motor 1 gira para frente
-  digitalWrite(IN3, LOW);   // Motor 2 parado
-  digitalWrite(IN4, LOW);   // Motor 2 parado
-  analogWrite(ENA, 255);    // Define a velocidade máxima para os motores conectados 
-  analogWrite(ENB, 255);    // Define a velocidade máxima para os motores conectados (parado)
-}
-
-void stopCar() {
-  // Configura os motores para parar o carro
-  digitalWrite(IN1, LOW);   // Motor 1 parado
-  digitalWrite(IN2, LOW);   // Motor 1 parado
-  digitalWrite(IN3, LOW);   // Motor 2 parado
-  digitalWrite(IN4, LOW);   // Motor 2 parado
-  analogWrite(ENA, 0);      // Define a velocidade 0 para os motores conectados (parado)
-  analogWrite(ENB, 0);      // Define a velocidade 0 para os motores conectados (parado)
+  // Verifica o comando recebido e controla os motores
+  if (recebido == 'F') {           // Se o comando for 'F' (frente)
+    digitalWrite(pinMotor1A, LOW); // Ativa o Motor 1A
+    digitalWrite(pinMotor1B, HIGH);  // Desativa o Motor 1B
+    digitalWrite(pinMotor2A, HIGH); // Ativa o Motor 2A
+    digitalWrite(pinMotor2B, LOW);  // Desativa o Motor 2B
+  } else if (recebido == 'B') {    // Se o comando for 'B' (trás)
+    digitalWrite(pinMotor1A, HIGH);  // Desativa o Motor 1A
+    digitalWrite(pinMotor1B, LOW); // Ativa o Motor 1B
+    digitalWrite(pinMotor2A, LOW);  // Desativa o Motor 2A
+    digitalWrite(pinMotor2B, HIGH); // Ativa o Motor 2B
+  } else if (recebido == 'L') {    // Se o comando for 'L' (esquerda)
+    digitalWrite(pinMotor1A, HIGH);  // Desativa o Motor 1A
+    digitalWrite(pinMotor1B, LOW); // Ativa o Motor 1B
+    digitalWrite(pinMotor2A, HIGH); // Ativa o Motor 2A
+    digitalWrite(pinMotor2B, LOW);  // Desativa o Motor 2B
+  } else if (recebido == 'R') {    // Se o comando for 'R' (direita)
+    digitalWrite(pinMotor1A, LOW); // Ativa o Motor 1A
+    digitalWrite(pinMotor1B, HIGH);  // Desativa o Motor 1B
+    digitalWrite(pinMotor2A, LOW);  // Desativa o Motor 2A
+    digitalWrite(pinMotor2B, HIGH); // Ativa o Motor 2B
+  } else if (recebido == 'S') {    // Se o comando for 'S' (parado)
+    digitalWrite(pinMotor1A, LOW);  // Desativa o Motor 1A
+    digitalWrite(pinMotor1B, LOW);  // Desativa o Motor 1B
+    digitalWrite(pinMotor2A, LOW);  // Desativa o Motor 2A
+    digitalWrite(pinMotor2B, LOW);  // Desativa o Motor 2B
+  }
 }
